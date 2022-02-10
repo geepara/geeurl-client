@@ -1,21 +1,57 @@
+import {
+  ChakraProvider,
+  Container,
+  Stack,
+  InputGroup,
+  InputLeftAddon,
+  Input,
+  Center,
+  Text,
+  Button,
+} from "@chakra-ui/react";
+import { useState } from "react";
+const axios = require("axios");
+
 function App() {
+  const [link, setLink] = useState("");
+
+  const handleChange = (event) => {
+    setLink(event.target.value);
+  };
+
+  const handleClick = async (event) => {
+    const baseURL = "https://geeurl-server.herokuapp.com/";
+    try {
+      const response = await axios.post(baseURL, {
+        long: link,
+      });
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <Center padding={5}>
+        <Container>
+          <Center padding={10}>
+            <Text fontSize="6xl">geeparaURL</Text>
+          </Center>
+          <Stack spacing={4}>
+            <InputGroup size="sm">
+              <InputLeftAddon children="Link: " />
+              <Input onChange={handleChange} />
+            </InputGroup>
+            <Center>
+              <Button w="5rem" h="2rem" padding={1} onClick={handleClick}>
+                Shorten
+              </Button>
+            </Center>
+          </Stack>
+        </Container>
+      </Center>
+    </ChakraProvider>
   );
 }
 
